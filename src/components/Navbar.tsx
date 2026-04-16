@@ -1,23 +1,25 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Wheat } from "lucide-react";
-
-const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Contact", href: "#contact" },
-];
+import { useLang } from "@/context/LanguageContext";
 
 const Navbar = () => {
+  const { lang, setLang, t } = useLang();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
+  const navLinks = [
+    { label: t("nav_home"), href: "#home" },
+    { label: t("nav_about"), href: "#about" },
+    { label: t("nav_services"), href: "#services" },
+    { label: t("nav_gallery"), href: "#gallery" },
+    { label: t("nav_contact"), href: "#contact" },
+  ];
+
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 50);
-      const sections = navLinks.map((l) => l.href.slice(1));
+      const sections = ["home", "about", "services", "gallery", "contact"];
       for (const id of [...sections].reverse()) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= 120) {
@@ -34,6 +36,24 @@ const Navbar = () => {
     setIsOpen(false);
     document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const LangSwitcher = ({ className = "" }: { className?: string }) => (
+    <div className={`flex items-center gap-1 ${className}`}>
+      {(["en", "hi"] as const).map((l) => (
+        <button
+          key={l}
+          onClick={() => setLang(l)}
+          className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
+            lang === l
+              ? "bg-golden text-golden-foreground shadow"
+              : "text-primary-foreground/70 hover:text-primary-foreground hover:bg-primary-foreground/10"
+          }`}
+        >
+          {l === "en" ? "EN" : "हि"}
+        </button>
+      ))}
+    </div>
+  );
 
   return (
     <nav
@@ -65,16 +85,24 @@ const Navbar = () => {
               </button>
             </li>
           ))}
+          <li>
+            <div className="ml-2 border-l border-primary-foreground/20 pl-3">
+              <LangSwitcher />
+            </div>
+          </li>
         </ul>
 
-        {/* Mobile Toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden p-2 text-primary-foreground"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* Mobile: Lang switcher + Toggle */}
+        <div className="md:hidden flex items-center gap-2">
+          <LangSwitcher />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="p-2 text-primary-foreground"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu */}

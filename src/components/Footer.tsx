@@ -1,9 +1,20 @@
 import { Wheat, Facebook, MessageCircle, Youtube } from "lucide-react";
+import { useLang } from "@/context/LanguageContext";
 
 const Footer = () => {
+  const { t } = useLang();
+
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const navKeys = [
+    { label: t("nav_home"),     href: "#home" },
+    { label: t("nav_about"),    href: "#about" },
+    { label: t("nav_services"), href: "#services" },
+    { label: t("nav_gallery"),  href: "#gallery" },
+    { label: t("nav_contact"),  href: "#contact" },
+  ];
 
   return (
     <footer className="bg-primary py-12">
@@ -14,22 +25,22 @@ const Footer = () => {
               <Wheat className="h-7 w-7 text-golden" />
               <span className="font-serif text-lg font-bold text-primary-foreground">Sundrela Krishi Kendra</span>
             </div>
-            <p className="text-primary-foreground/70 text-sm">Modern Farming Solutions for Every Field. Empowering farmers with reliable equipment services.</p>
+            <p className="text-primary-foreground/70 text-sm">{t("footer_tagline")}</p>
           </div>
           <div>
-            <h4 className="font-serif font-bold text-primary-foreground mb-3">Quick Links</h4>
+            <h4 className="font-serif font-bold text-primary-foreground mb-3">{t("footer_quicklinks")}</h4>
             <ul className="space-y-2">
-              {["Home", "About", "Services", "Gallery", "Contact"].map((link) => (
-                <li key={link}>
-                  <button onClick={() => scrollTo(`#${link.toLowerCase()}`)} className="text-primary-foreground/70 hover:text-golden transition-colors text-sm">
-                    {link}
+              {navKeys.map((link) => (
+                <li key={link.href}>
+                  <button onClick={() => scrollTo(link.href)} className="text-primary-foreground/70 hover:text-golden transition-colors text-sm">
+                    {link.label}
                   </button>
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h4 className="font-serif font-bold text-primary-foreground mb-3">Follow Us</h4>
+            <h4 className="font-serif font-bold text-primary-foreground mb-3">{t("footer_follow")}</h4>
             <div className="flex gap-3">
               <a href="#" className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center text-primary-foreground hover:bg-golden hover:text-golden-foreground transition-colors">
                 <Facebook className="w-5 h-5" />
@@ -44,7 +55,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t border-primary-foreground/10 pt-6 text-center">
-          <p className="text-primary-foreground/50 text-sm">© 2025 Sundrela Krishi Kendra. All rights reserved.</p>
+          <p className="text-primary-foreground/50 text-sm">{t("footer_copyright")}</p>
         </div>
       </div>
     </footer>

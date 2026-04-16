@@ -1,7 +1,9 @@
 import { motion } from "framer-motion";
 import heroBg from "@/assets/hero-bg.jpg";
+import { useLang } from "@/context/LanguageContext";
 
 const HeroSection = () => {
+  const { t } = useLang();
   const scrollTo = (id: string) => {
     document.querySelector(id)?.scrollIntoView({ behavior: "smooth" });
   };
@@ -24,23 +26,23 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
         >
           <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl font-bold text-primary-foreground mb-4 drop-shadow-lg">
-            Sundrela Krishi Kendra
+            {t("hero_title")}
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto font-medium">
-            Modern Farming Solutions for Every Field
+            {t("hero_subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
               onClick={() => scrollTo("#services")}
               className="px-8 py-4 bg-golden text-golden-foreground font-semibold rounded-lg text-lg hover:brightness-110 transition-all min-h-[48px] shadow-lg"
             >
-              Our Services
+              {t("hero_btn_services")}
             </button>
             <button
               onClick={() => scrollTo("#contact")}
               className="px-8 py-4 bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground border-2 border-primary-foreground/30 font-semibold rounded-lg text-lg hover:bg-primary-foreground/20 transition-all min-h-[48px]"
             >
-              Contact Us
+              {t("hero_btn_contact")}
             </button>
           </div>
         </motion.div>

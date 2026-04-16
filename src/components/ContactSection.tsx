@@ -2,16 +2,25 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, MapPin, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
+import { useLang } from "@/context/LanguageContext";
 
-const serviceOptions = [
+const serviceOptionsEn = [
   "Combine Harvester", "Trolley (Trole)", "Cultivator", "Rotavator",
   "Plough (Hal)", "Thresher (Thraser)", "Seed Drill", "Potato Planter", "Garlic Planter",
+];
+
+const serviceOptionsHi = [
+  "कंबाइन हार्वेस्टर", "ट्रॉली", "कल्टीवेटर", "रोटावेटर",
+  "हल", "थ्रेशर", "सीड ड्रिल", "आलू प्लांटर", "लहसुन प्लांटर",
 ];
 
 const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 
 const ContactSection = () => {
+  const { lang, t } = useLang();
   const [form, setForm] = useState({ name: "", village: "", phone: "", service: "", message: "" });
+
+  const serviceOptions = lang === "hi" ? serviceOptionsHi : serviceOptionsEn;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,24 +35,24 @@ const ContactSection = () => {
       <div className="container mx-auto px-4">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} transition={{ staggerChildren: 0.12 }}>
           <motion.h2 variants={fadeUp} transition={{ duration: 0.5 }} className="font-serif text-3xl md:text-4xl font-bold text-foreground text-center mb-2">
-            Get in Touch
+            {t("contact_title")}
           </motion.h2>
           <motion.p variants={fadeUp} transition={{ duration: 0.5 }} className="font-serif text-xl text-muted-foreground text-center mb-12">
-            संपर्क करें
+            {t("contact_subtitle")}
           </motion.p>
 
           <div className="grid md:grid-cols-2 gap-10">
             <motion.form variants={fadeUp} transition={{ duration: 0.5 }} onSubmit={handleSubmit} className="space-y-4">
               <input
                 required
-                placeholder="Your Name / आपका नाम"
+                placeholder={t("contact_name")}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg border border-input bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[48px]"
               />
               <input
                 required
-                placeholder="Village / City"
+                placeholder={t("contact_village")}
                 value={form.village}
                 onChange={(e) => setForm({ ...form, village: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg border border-input bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[48px]"
@@ -51,7 +60,7 @@ const ContactSection = () => {
               <input
                 required
                 type="tel"
-                placeholder="Phone Number / फोन नंबर"
+                placeholder={t("contact_phone")}
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg border border-input bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[48px]"
@@ -62,13 +71,13 @@ const ContactSection = () => {
                 onChange={(e) => setForm({ ...form, service: e.target.value })}
                 className="w-full px-4 py-3 rounded-lg border border-input bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[48px]"
               >
-                <option value="">Select Service / सेवा चुनें</option>
+                <option value="">{t("contact_service_placeholder")}</option>
                 {serviceOptions.map((s) => (
                   <option key={s} value={s}>{s}</option>
                 ))}
               </select>
               <textarea
-                placeholder="Message (optional)"
+                placeholder={t("contact_message")}
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 rows={3}
@@ -78,7 +87,7 @@ const ContactSection = () => {
                 type="submit"
                 className="w-full py-4 bg-primary text-primary-foreground font-semibold rounded-lg text-lg hover:brightness-110 transition-all min-h-[48px]"
               >
-                Send Message / संदेश भेजें
+                {t("contact_send")}
               </button>
             </motion.form>
 
@@ -88,7 +97,7 @@ const ContactSection = () => {
                   <Phone className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-foreground">Phone</h3>
+                  <h3 className="font-serif font-bold text-foreground">{t("contact_phone_label")}</h3>
                   <p className="text-muted-foreground">+91 90096 62535</p>
                 </div>
               </div>
@@ -97,8 +106,8 @@ const ContactSection = () => {
                   <MapPin className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-serif font-bold text-foreground">Address</h3>
-                  <p className="text-muted-foreground">Village Kaluheda, District Ujjain, M.P.</p>
+                  <h3 className="font-serif font-bold text-foreground">{t("contact_address_label")}</h3>
+                  <p className="text-muted-foreground">{t("contact_address_value")}</p>
                 </div>
               </div>
               <a
@@ -108,10 +117,10 @@ const ContactSection = () => {
                 className="flex items-center gap-3 px-6 py-4 bg-[hsl(142,70%,40%)] text-primary-foreground rounded-lg font-semibold text-lg hover:brightness-110 transition-all min-h-[48px] w-fit"
               >
                 <MessageCircle className="w-6 h-6" />
-                Chat on WhatsApp
+                {t("contact_whatsapp")}
               </a>
 
-              {/* Map placeholder */}
+              {/* Map */}
               <div className="rounded-xl overflow-hidden border border-border shadow-sm">
                 <iframe
                   title="Location Map"
